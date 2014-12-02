@@ -1,6 +1,6 @@
 
-DragMath Copyright Information
-
+DragMath Copyright Information 
+ 
 All source code in this package is written by Alex Billingsley except
 the libraries JDOM and JEP used.
 
