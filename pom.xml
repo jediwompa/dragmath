@@ -1,0 +1,193 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>dragmath</groupId>
+	<artifactId>dragmath</artifactId>
+	<!-- 0.7.9 was the last version released on 10/10/2010 -->
+	<version>0.8.0-SNAPSHOT</version>
+
+	<name>DragMath</name>
+
+	<description>DragMath</description>
+
+	<packaging>jar</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- VERSIONS -->
+		<java.version>1.6</java.version>
+		<junit.version>4.6</junit.version>
+		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+		<maven-jar-plugin.version>2.5</maven-jar-plugin.version>
+
+		<jep.version>1.0.0</jep.version>
+		<absolutelayout.version>1.0.0</absolutelayout.version>
+		<netbeans.absolutelayout.version>RELEASE701</netbeans.absolutelayout.version>
+		<jdom.version>1.0</jdom.version>
+		<org.swinglabs.swing-layout.version>1.0.3</org.swinglabs.swing-layout.version>
+		<commons-codec.version>1.10</commons-codec.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- Can't use jep from Maven Central because it is missing some classes, 
+				such as Union, Intersection, etc needed by BuildTree -->
+			<dependency>
+				<groupId>JEP</groupId>
+				<artifactId>JEP</artifactId>
+				<version>${jep.version}</version>
+				<scope>system</scope>
+				<systemPath>${basedir}/lib/JEP.jar</systemPath>
+			</dependency>
+
+			<!-- can't find in Maven Central -->
+			<dependency>
+				<groupId>absolutelayout</groupId>
+				<artifactId>AbsoluteLayout</artifactId>
+				<version>${absolutelayout.version}</version>
+				<scope>system</scope>
+				<systemPath>${basedir}/lib/AbsoluteLayout.jar</systemPath>
+			</dependency>
+
+			<!-- Maven Central Dependencies -->
+			<dependency>
+				<groupId>org.swinglabs</groupId>
+				<artifactId>swing-layout</artifactId>
+				<version>${org.swinglabs.swing-layout.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>${commons-codec.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>jdom</groupId>
+				<artifactId>jdom</artifactId>
+				<version>${jdom.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.netbeans.external</groupId>
+				<artifactId>AbsoluteLayout</artifactId>
+				<version>${netbeans.absolutelayout.version}</version>
+				<scope>compile</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>JEP</groupId>
+			<artifactId>JEP</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.netbeans.external</groupId>
+			<artifactId>AbsoluteLayout</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.swinglabs</groupId>
+			<artifactId>swing-layout</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jdom</groupId>
+			<artifactId>jdom</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<debug>true</debug>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven-jar-plugin.version}</version>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<manifest>
+							<mainClass>Display.MainApplet</mainClass>
+							<addClasspath>true</addClasspath>
+							<!-- <url>https://github.com/maths/dragmath</url> -->
+							<classpathPrefix>lib/</classpathPrefix>
+						</manifest>
+						<manifestEntries>
+							<Class-Path>lib/JEP.jar</Class-Path>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.3.2</version>
+				<executions>
+					<execution>
+						<id>sign</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+
+					</execution>
+				</executions>
+				<configuration>
+					<keystore>/Users/kevincoy/git/dragmath/selfsignedstore2.jks</keystore>
+					<alias>selfsigned2</alias>
+					<storepass>welcome</storepass>
+					<removeExistingSignatures>true</removeExistingSignatures>
+					<classifier>signed</classifier>
+					<verify>true</verify>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<!-- NOTE: We don't need a groupId specification because the group is 
+					org.apache.maven.plugins ...which is assumed by default. -->
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.5.2</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/assembly.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<!--These are needed for Swing/Netbeans -->
+		<!-- http://www.berecursive.com/2011/java/maven-dependency-for-org-netbeans-absolutelayout-in-a-swing-application -->
+		<repository>
+			<id>maven2-repository.netbeans.maven2</id>
+			<name>Netbeans Maven Repository</name>
+			<url>http://bits.netbeans.org/maven2/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+</project>

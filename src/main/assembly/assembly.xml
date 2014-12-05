@@ -1,0 +1,75 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+  <id>installation-bundle</id>
+  <formats>
+    <format>zip</format>
+    <format>tar.gz</format>
+  </formats>
+  <dependencySets>
+  	<!-- All of the other dependencies need to go here. These seem to not need to be signed. -->
+    <dependencySet>
+      <outputDirectory>applet/lib</outputDirectory>
+      <useProjectArtifact>false</useProjectArtifact>
+    </dependencySet>
+    <!-- Need to keep the project artifact at the applet folder level. This needs to be signed. -->
+    <dependencySet>
+      	<outputDirectory>applet</outputDirectory>
+    	<useProjectArtifact>true</useProjectArtifact>
+    	<includes>
+    		<include>dragmath:dragmath</include>
+    	</includes>
+    </dependencySet>
+  </dependencySets>
+  <files>
+    <file>
+      <source>applet.html</source>
+      <outputDirectory>/</outputDirectory>
+    </file>  
+    <file>
+      <source>README.md</source>
+      <outputDirectory>/</outputDirectory>
+    </file>
+    <file>
+      <source>LICENSE-gpl.txt</source>
+      <outputDirectory>/</outputDirectory>
+    </file>
+    <file>
+      <source>homepage/COPYRIGHT.html</source>
+      <outputDirectory>/</outputDirectory>
+    </file>
+    <file>
+      <source>Config.xml</source>
+      <outputDirectory>/applet/</outputDirectory>
+    </file>
+    
+    <!-- Version history is renamed... -->
+    <file>
+      <source>homepage/versionHistory.html</source>
+      <outputDirectory>/</outputDirectory>
+      <destName>Version History.html</destName>
+    </file>    
+    
+    <!-- Manually including these for now since they are not in Maven Central -->   
+    <file>
+      <source>lib/JEP.jar</source>
+      <outputDirectory>/applet/lib/</outputDirectory>
+    </file> 
+  </files>
+  
+  <!-- Need to include these entire directories -->
+  <fileSets>
+    <fileSet>
+      <directory>formats</directory>
+      <outputDirectory>/applet/formats/</outputDirectory>
+    </fileSet>   
+    <fileSet>
+      <directory>lang</directory>
+      <outputDirectory>/applet/lang/</outputDirectory>
+    </fileSet> 
+    <fileSet>
+      <directory>homepage/doc</directory>
+      <outputDirectory>/doc/</outputDirectory>
+    </fileSet>        	
+  </fileSets>
+</assembly>
