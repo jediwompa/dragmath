@@ -61,7 +61,9 @@ public class LanguageManager {
     public void loadLanguageFile(String language) {
         try {
             URL path = new URL(appletCodeBase + "lang/" + language + ".xml");
+//            JOptionPane.showMessageDialog(null, "Trying to load language file: " + path, "DragMath412", JOptionPane.ERROR_MESSAGE);
             languageFile = builder.build(path);
+            
         } catch (java.io.FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Error reading language file", "DragMath333", JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {

@@ -174,6 +174,10 @@ public class MainApplet extends javax.swing.JApplet {
                     try {
                     	/* Unfortunately this was needed: http://www.duckware.com/tech/java-security-clusterfuck.html */
 						appletCodeBase = new URL("file:///Users/kevincoy/Downloads/DragMath/dragmath/");
+						appletCodeBase = new URL("file:///Users/kevincoy/git/dragmath/target/dragmath-0.8.0-SNAPSHOT/applet/");
+						
+						// actually seems to work better when pointed at wrong path...
+						//appletCodeBase = getCodeBase();
 					} catch (MalformedURLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
